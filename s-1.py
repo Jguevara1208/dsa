@@ -109,3 +109,32 @@ def merge_lists(head_1, head_2):
       tail.next = current_2
 
   return dummy_head.next
+
+
+"""
+is univalue list
+Write a function, is_univalue_list, that takes in the head of a linked list as an argument. The function should return a boolean indicating whether or not the linked list contains exactly one unique value.
+
+You may assume that the input list is non-empty.
+
+test_00:
+a = Node(7)
+b = Node(7)
+c = Node(7)
+
+a.next = b
+b.next = c
+
+# 7 -> 7 -> 7
+
+is_univalue_list(a) # True
+"""
+
+
+def is_univalue_list(head):
+  one_val = head.val
+  while head is not None:
+    if head.val != one_val:
+      return False
+    head = head.next
+  return True
