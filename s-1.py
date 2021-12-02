@@ -226,3 +226,47 @@ def remove_node(head, target_val):
     curr = curr.next
 
   return head
+
+"""
+insert node
+Write a function, insert_node, that takes in the head of a linked list, a value, and an index. The function should insert a new node with the value into the list at the specified index. Consider the head of the linked list as index 0. The function should return the head of the resulting linked list.
+
+Do this in-place.
+
+You may assume that the input list is non-empty and the index is not greater than the length of the input list.
+
+test_00:
+a = Node("a")
+b = Node("b")
+c = Node("c")
+d = Node("d")
+
+a.next = b
+b.next = c
+c.next = d
+
+# a -> b -> c -> d
+
+insert_node(a, 'x', 2)
+# a -> b -> x -> c -> d
+"""
+
+def insert_node(head, value, index):
+  if index == 0:
+    new_node = Node(value)
+    new_node.next = head
+    return new_node
+
+  curr_index = 1
+  curr_node = head.next
+
+  while curr_node is not None:
+    if curr_index == index - 1:
+      temp_next = curr_node.next
+      curr_node.next = Node(value)
+      curr_node.next.next = temp_next
+
+    curr_index += 1
+    curr_node = curr_node.next
+
+  return head
