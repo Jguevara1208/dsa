@@ -185,3 +185,124 @@ const allTreePaths = (root) => {
   
   return paths
 }
+
+/*
+has path
+Write a function, hasPath, that takes in an object representing the adjacency list of a directed acyclic graph and two nodes (src, dst). The function should return a boolean indicating whether or not there exists a directed path between the source and destination nodes.
+
+Hey. This is our first graph problem, so you should be liberal with watching the Approach and Walkthrough. Be productive, not stubborn. -AZ
+
+test_00:
+const graph = {
+  f: ['g', 'i'],
+  g: ['h'],
+  h: [],
+  i: ['g', 'k'],
+  j: ['i'],
+  k: []
+};
+
+hasPath(graph, 'f', 'k'); // true
+*/
+
+const hasPath = (graph, src, dst) => {
+  if (src === dst) return true
+  
+  for (let neighbor of graph[src]) {
+    if (hasPath(graph, neighbor, dst) === true) {
+      return true
+    }
+  }
+  return false
+};
+
+/*
+undirected path
+Write a function, undirectedPath, that takes in an array of edges for an undirected graph and two nodes (nodeA, nodeB). The function should return a boolean indicating whether or not there exists a path between nodeA and nodeB.
+
+test_00:
+const edges = [
+  ['i', 'j'],
+  ['k', 'i'],
+  ['m', 'k'],
+  ['k', 'l'],
+  ['o', 'n']
+];
+
+undirectedPath(edges, 'j', 'm'); // -> true
+*/
+
+const undirectedPath = (edges, nodeA, nodeB) => {
+  const adj_list = buildGraph(edges)
+  return hasPath(adj_list, nodeA, nodeB, new Set())
+};
+
+const hasPath = (graph, src, dst, visited) => {
+  if (src === dst) return true
+  
+  for (let neighbor of graph[src]) {
+    if (!visited.has(neighbor)) {
+      visited.add(neighbor)
+      if (hasPath(graph, neighbor, dst, visited)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+const buildGraph = (edges) => {
+  const graph = {};
+  
+  for (let edge of edges) {
+    const [ a, b ] = edge;
+    if (!(a in graph)) graph[a] = [];
+    if (!(b in graph)) graph[b] = [];
+    graph[a].push(b);
+    graph[b].push(a);
+  }
+  
+  return graph;
+};
+
+
+/*
+connected components count
+Write a function, connectedComponentsCount, that takes in the adjacency list of an undirected graph. The function should return the number of connected components within the graph.
+
+test_00:
+connectedComponentsCount({
+  0: [8, 1, 5],
+  1: [0],
+  5: [0, 8],
+  8: [0, 5],
+  2: [3, 4],
+  3: [2, 4],
+  4: [3, 2]
+}); // -> 2
+*/
+
+
+const connectedComponentsCount = (graph) => {
+  let count = 0
+  let visited = new Set()
+  
+  for (let node in graph){
+    if (exploreGraph(graph, node, visited) === true) {
+      count++
+    }
+  }
+  return count
+};
+
+const exploreGraph = (graph, current, visited) => {
+  if (visited.has(String(current))) return false
+  
+  visited.add(String(current))
+  
+  for (let neighbor of graph[current]) {
+    exploreGraph(graph, neighbor, visited)
+  }
+  
+  return true
+}
