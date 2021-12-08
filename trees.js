@@ -309,7 +309,39 @@ const exploreGraph = (graph, current, visited) => {
 
 
 /*
+all tree paths
+Write a function, allTreePaths, that takes in the root of a binary tree. The function should return a 2-Dimensional array where each subarray represents a root-to-leaf path in the tree.
 
+The order within an individual path must start at the root and end at the leaf, but the relative order among paths in the outer array does not matter.
+
+You may assume that the input tree is non-empty.
+
+test_00:
+const a = new Node('a');
+const b = new Node('b');
+const c = new Node('c');
+const d = new Node('d');
+const e = new Node('e');
+const f = new Node('f');
+
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+//      a
+//    /   \
+//   b     c
+//  / \     \
+// d   e     f
+
+allTreePaths(a); // ->
+// [ 
+//   [ 'a', 'b', 'd' ], 
+//   [ 'a', 'b', 'e' ], 
+//   [ 'a', 'c', 'f' ] 
+// ] 
 */
 
 const allTreePaths = (root) => {
@@ -326,3 +358,60 @@ const allTreePaths = (root) => {
   
   return paths
 }
+
+/*
+tree levels
+Write a function, treeLevels, that takes in the root of a binary tree. The function should return a 2-Dimensional array where each subarray represents a level of the tree.
+
+test_00:
+const a = new Node("a");
+const b = new Node("b");
+const c = new Node("c");
+const d = new Node("d");
+const e = new Node("e");
+const f = new Node("f");
+
+a.left = b;
+a.right = c;
+b.left = d;
+b.right = e;
+c.right = f;
+
+//      a
+//    /   \
+//   b     c
+//  / \     \
+// d   e     f
+
+treeLevels(a); // ->
+// [
+//   ['a'],
+//   ['b', 'c'],
+//   ['d', 'e', 'f']
+// ]
+*/
+
+const treeLevels = (root) => {
+  
+  const res = []
+  const stack = [{node: root, level: 0}]
+  
+  while (stack.length){
+    const current = stack.pop()
+    let {node, level} = current
+    if (node !== null) {
+      if (!res[level]) res[level] = []
+      res[level].push(node.val)
+  
+      if (node.right !== null) {
+        stack.push({node: node.right, level: level + 1})
+      }
+
+      if (node.left !== null) {
+        stack.push({node: node.left, level: level + 1})
+      } 
+    }
+  }
+  
+  return res
+};
