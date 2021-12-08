@@ -306,3 +306,23 @@ const exploreGraph = (graph, current, visited) => {
   
   return true
 }
+
+
+/*
+
+*/
+
+const allTreePaths = (root) => {
+  if (root === null) return []
+  if (root.left === null && root.right === null) return [[root.val]]
+  
+  const paths = []
+
+  const leftSubs = allTreePaths(root.left)
+  for (let sub of leftSubs) paths.push([root.val, ...sub])
+  
+  const rightSubs = allTreePaths(root.right)
+  for (let sub of rightSubs) paths.push([root.val, ...sub])
+  
+  return paths
+}
