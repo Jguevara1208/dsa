@@ -77,3 +77,50 @@ const explore = (graph, node, visited) => {
   
   return size
 }
+
+/*
+shortest path
+Write a function, shortestPath, that takes in an array of edges for an undirected graph and two nodes (nodeA, nodeB). The function should return the length of the shortest path between A and B. Consider the length as the number of edges in the path, not the number of nodes. If there is no path between A and B, then return -1.
+
+test_00:
+const edges = [
+  ['w', 'x'],
+  ['x', 'y'],
+  ['z', 'y'],
+  ['z', 'v'],
+  ['w', 'v']
+];
+
+shortestPath(edges, 'w', 'z'); // -> 2
+*/
+
+const shortestPath = (edges, nodeA, nodeB) => {
+  const graph = createGraph(edges)
+  const visited = new Set([nodeA])
+  const queue = [[nodeA, 0]]
+  
+  while (queue.length) {
+    const [current, distance] = queue.shift()
+    if (current === nodeB) return distance
+    
+    for (let adj of graph[current]) {
+      if (!visited.has(adj)) {
+        visited.add(adj)
+        queue.push([adj, distance + 1])
+      }
+    }
+  }
+  return -1
+};
+
+const createGraph = (edges) => {
+  const graph = {}
+  for (let edge of edges) {
+    const [left, right] = edge
+    if (!(left in graph)) graph[left] = []
+    if (!(right in graph)) graph[right] = []
+    graph[left].push(right)
+    graph[right].push(left)
+  }
+  return graph
+}
