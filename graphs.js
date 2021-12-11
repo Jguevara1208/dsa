@@ -124,3 +124,110 @@ const createGraph = (edges) => {
   }
   return graph
 }
+
+
+/*
+island count
+Write a function, islandCount, that takes in a grid containing Ws and Ls. W represents water and L represents land. The function should return the number of islands on the grid. An island is a vertically or horizontally connected region of land.
+
+test_00:
+const grid = [
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'W', 'W', 'L', 'W'],
+  ['W', 'W', 'L', 'L', 'W'],
+  ['L', 'W', 'W', 'L', 'L'],
+  ['L', 'L', 'W', 'W', 'W'],
+];
+
+islandCount(grid); // -> 3
+*/
+
+const islandCount = (grid) => {
+  const visited = new Set()
+  let count = 0
+  
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[0].length; c++){
+      if (explore(grid, r, c, visited) === true) {
+       count += 1 
+      }
+    }
+  }
+  
+  return count
+};
+
+const explore = (grid, r, c, visited) => {
+  const rowInbounds = 0 <= r && r < grid.length;
+  const colInbounds = 0 <= c && c < grid.length;
+  if (!rowInbounds || !colInbounds) return false
+  
+  if (grid[r][c] === 'W') return false
+  
+  const pos = `${r},${c}`;
+  if (visited.has(pos)) return false;
+  visited.add(pos);
+  
+  explore(grid, r - 1, c, visited)
+  explore(grid, r + 1, c, visited)
+  explore(grid, r, c - 1, visited)
+  explore(grid, r, c + 1, visited)
+  
+  return true
+}
+
+/*
+minimum island
+Write a function, minimumIsland, that takes in a grid containing Ws and Ls. W represents water and L represents land. The function should return the size of the smallest island. An island is a vertically or horizontally connected region of land.
+
+You may assume that the grid contains at least one island.
+
+test_00:
+const grid = [
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'L', 'W', 'W', 'W'],
+  ['W', 'W', 'W', 'L', 'W'],
+  ['W', 'W', 'L', 'L', 'W'],
+  ['L', 'W', 'W', 'L', 'L'],
+  ['L', 'L', 'W', 'W', 'W'],
+];
+
+minimumIsland(grid); // -> 2
+*/
+
+const minimumIsland = (grid) => {
+  
+  let currSmallest = Infinity
+  const visited = new Set()
+  
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[0].length; c++) {
+      let currLength = explore(grid, r, c, visited)
+      if (currLength > 0 && currLength < currSmallest) {
+        currSmallest = currLength
+      }
+    }
+  }
+  return currSmallest
+};
+
+const explore = (grid, r, c, visited) => {
+  const rowInbounds = r >= 0 && r < grid.length
+  const colInbounds = c >= 0 && c < grid[0].length
+  if (!rowInbounds || !colInbounds) return 0
+  
+  if (grid[r][c] === 'W') return 0
+  
+  const pos = r + ',' + c
+  if(visited.has(pos)) return 0
+  visited.add(pos)
+  
+  let count = 1 
+  count += explore(grid, r + 1, c, visited)
+  count += explore(grid, r - 1, c, visited)
+  count += explore(grid, r, c + 1, visited)
+  count += explore(grid, r, c - 1, visited)
+  
+  return count
+}
